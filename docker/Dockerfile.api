@@ -1,0 +1,85 @@
+# Use the official .NET 9 runtime as the base image for the final stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+# Create non-root user for security
+RUN addgroup --system --gid 1000 appuser \
+    && adduser --system --uid 1000 --gid 1000 --home /app --shell /bin/false appuser
+
+# Use the SDK image to build the application
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Copy csproj files and restore dependencies
+COPY ["src/BankPlatform.API/BankPlatform.API.csproj", "src/BankPlatform.API/"]
+COPY ["src/BankPlatform.Core/BankPlatform.Core.csproj", "src/BankPlatform.Core/"]
+COPY ["src/BankPlatform.Identity/BankPlatform.Identity.csproj", "src/BankPlatform.Identity/"]
+COPY ["src/BankPlatform.Infrastructure/BankPlatform.Infrastructure.csproj", "src/BankPlatform.Infrastructure/"]
+COPY ["src/BankPlatform.Integrations/BankPlatform.Integrations.csproj", "src/BankPlatform.Integrations/"]
+
+RUN dotnet restore "src/BankPlatform.API/BankPlatform.API.csproj"
+
+# Copy the entire source code
+COPY . .
+
+# Build the application
+WORKDIR "/src/src/BankPlatform.API"
+RUN dotnet build "BankPlatform.API.csproj" -c Release -o /app/build
+
+# Publish the application
+FROM build AS publish
+RUN dotnet publish "BankPlatform.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Final stage/image
+FROM base AS final
+WORKDIR /app
+
+# Install security updates and required packages
+USER root
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        tzdata \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Set timezone to UTC
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Copy published application
+COPY --from=publish /app/publish .
+
+# Create logs directory and set permissions
+RUN mkdir -p /app/logs \
+    && chown -R appuser:appuser /app \
+    && chmod -R 755 /app
+
+# Switch to non-root user
+USER appuser
+
+# Configure ASP.NET Core
+ENV ASPNETCORE_URLS=http://+:80
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:80/health || exit 1
+
+# Set entry point
+ENTRYPOINT ["dotnet", "BankPlatform.API.dll"]
+
+# Metadata
+LABEL maintainer="Bank Platform Development Team <dev@bankplatform.com>"
+LABEL version="1.0.0"
+LABEL description="BoG-Compliant Digital Banking Platform API"
+LABEL org.opencontainers.image.title="BankPlatform API"
+LABEL org.opencontainers.image.description="Secure, compliant banking platform API"
+LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.vendor="Bank Platform"
+LABEL org.opencontainers.image.source="https://github.com/bankplatform/bankplatform"
