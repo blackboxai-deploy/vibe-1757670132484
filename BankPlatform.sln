@@ -1,0 +1,102 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A1B2C3D4-E5F6-7890-ABCD-123456789000}"
+EndProject
+
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B2C3D4E5-F6G7-8901-BCDE-234567890111}"
+EndProject
+
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{C3D4E5F6-G7H8-9012-CDEF-345678901222}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.API", "src\BankPlatform.API\BankPlatform.API.csproj", "{11111111-2222-3333-4444-555555555555}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Identity", "src\BankPlatform.Identity\BankPlatform.Identity.csproj", "{22222222-3333-4444-5555-666666666666}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Core", "src\BankPlatform.Core\BankPlatform.Core.csproj", "{33333333-4444-5555-6666-777777777777}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Infrastructure", "src\BankPlatform.Infrastructure\BankPlatform.Infrastructure.csproj", "{44444444-5555-6666-7777-888888888888}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Integrations", "src\BankPlatform.Integrations\BankPlatform.Integrations.csproj", "{55555555-6666-7777-8888-999999999999}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Web", "src\BankPlatform.Web\BankPlatform.Web.csproj", "{66666666-7777-8888-9999-AAAAAAAAAAAA}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Mobile", "src\BankPlatform.Mobile\BankPlatform.Mobile.csproj", "{77777777-8888-9999-AAAA-BBBBBBBBBBBB}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Tests.Unit", "tests\BankPlatform.Tests.Unit\BankPlatform.Tests.Unit.csproj", "{88888888-9999-AAAA-BBBB-CCCCCCCCCCCC}"
+EndProject
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankPlatform.Tests.Integration", "tests\BankPlatform.Tests.Integration\BankPlatform.Tests.Integration.csproj", "{99999999-AAAA-BBBB-CCCC-DDDDDDDDDDDD}"
+EndProject
+
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11111111-2222-3333-4444-555555555555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-2222-3333-4444-555555555555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-2222-3333-4444-555555555555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-2222-3333-4444-555555555555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22222222-3333-4444-5555-666666666666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22222222-3333-4444-5555-666666666666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22222222-3333-4444-5555-666666666666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22222222-3333-4444-5555-666666666666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33333333-4444-5555-6666-777777777777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33333333-4444-5555-6666-777777777777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33333333-4444-5555-6666-777777777777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33333333-4444-5555-6666-777777777777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44444444-5555-6666-7777-888888888888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44444444-5555-6666-7777-888888888888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44444444-5555-6666-7777-888888888888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44444444-5555-6666-7777-888888888888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55555555-6666-7777-8888-999999999999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55555555-6666-7777-8888-999999999999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55555555-6666-7777-8888-999999999999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55555555-6666-7777-8888-999999999999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66666666-7777-8888-9999-AAAAAAAAAAAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66666666-7777-8888-9999-AAAAAAAAAAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66666666-7777-8888-9999-AAAAAAAAAAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66666666-7777-8888-9999-AAAAAAAAAAAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77777777-8888-9999-AAAA-BBBBBBBBBBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77777777-8888-9999-AAAA-BBBBBBBBBBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77777777-8888-9999-AAAA-BBBBBBBBBBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77777777-8888-9999-AAAA-BBBBBBBBBBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88888888-9999-AAAA-BBBB-CCCCCCCCCCCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88888888-9999-AAAA-BBBB-CCCCCCCCCCCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88888888-9999-AAAA-BBBB-CCCCCCCCCCCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88888888-9999-AAAA-BBBB-CCCCCCCCCCCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99999999-AAAA-BBBB-CCCC-DDDDDDDDDDDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99999999-AAAA-BBBB-CCCC-DDDDDDDDDDDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99999999-AAAA-BBBB-CCCC-DDDDDDDDDDDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99999999-AAAA-BBBB-CCCC-DDDDDDDDDDDD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11111111-2222-3333-4444-555555555555} = {A1B2C3D4-E5F6-7890-ABCD-123456789000}
+		{22222222-3333-4444-5555-666666666666} = {A1B2C3D4-E5F6-7890-ABCD-123456789000}
+		{33333333-4444-5555-6666-777777777777} = {A1B2C3D4-E5F6-7890-ABCD-123456789000}
+		{44444444-5555-6666-7777-888888888888} = {A1B2C3D4-E5F6-7890-ABCD-123456789000}
+		{55555555-6666-7777-8888-999999999999} = {A1B2C3D4-E5F6-7890-ABCD-123456789000}
+		{66666666-7777-8888-9999-AAAAAAAAAAAA} = {A1B2C3D4-E5F6-7890-ABCD-123456789000}
+		{77777777-8888-9999-AAAA-BBBBBBBBBBBB} = {A1B2C3D4-E5F6-7890-ABCD-123456789000}
+		{88888888-9999-AAAA-BBBB-CCCCCCCCCCCC} = {B2C3D4E5-F6G7-8901-BCDE-234567890111}
+		{99999999-AAAA-BBBB-CCCC-DDDDDDDDDDDD} = {B2C3D4E5-F6G7-8901-BCDE-234567890111}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE}
+	EndGlobalSection
+EndGlobal
