@@ -1,0 +1,884 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "BoG-Compliant Digital Banking Platform API",
+    "description": "Comprehensive banking platform API with BoG CISD compliance and ISO 27001 security standards",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Bank Platform Development Team",
+      "email": "api-support@bankplatform.com",
+      "url": "https://docs.bankplatform.com"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://bankplatform.com/license"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.bankplatform.com/v1",
+      "description": "Production Server"
+    },
+    {
+      "url": "https://sandbox-api.bankplatform.com/v1",
+      "description": "Sandbox Server"
+    },
+    {
+      "url": "https://localhost:5001/api",
+      "description": "Development Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User authentication and authorization"
+    },
+    {
+      "name": "Customers",
+      "description": "Customer management and KYC operations"
+    },
+    {
+      "name": "Accounts",
+      "description": "Bank account management"
+    },
+    {
+      "name": "Wallets",
+      "description": "Digital wallet operations"
+    },
+    {
+      "name": "Transactions",
+      "description": "Financial transaction processing"
+    },
+    {
+      "name": "Loans",
+      "description": "Loan management and processing"
+    },
+    {
+      "name": "Payments",
+      "description": "Bill payments and money transfers"
+    },
+    {
+      "name": "Reports",
+      "description": "Financial reports and statements"
+    },
+    {
+      "name": "Admin",
+      "description": "Administrative operations"
+    },
+    {
+      "name": "Health",
+      "description": "System health and monitoring"
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User login",
+        "description": "Authenticate user and return JWT token",
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        }
+      }
+    },
+    "/auth/mfa/verify": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Verify MFA code",
+        "description": "Verify multi-factor authentication code",
+        "operationId": "verifyMfa",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MfaVerifyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "MFA verification successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid MFA code"
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": ["Customers"],
+        "summary": "Get customers",
+        "description": "Retrieve list of customers with pagination",
+        "operationId": "getCustomers",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {"type": "integer", "default": 1}
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {"type": "integer", "default": 20}
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of customers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Customers"],
+        "summary": "Create customer",
+        "description": "Create new customer with KYC information",
+        "operationId": "createCustomer",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Customer created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          },
+          "409": {
+            "description": "Customer already exists"
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "tags": ["Customers"],
+        "summary": "Get customer by ID",
+        "description": "Retrieve customer details by ID",
+        "operationId": "getCustomerById",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string", "format": "uuid"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Customers"],
+        "summary": "Update customer",
+        "description": "Update customer information",
+        "operationId": "updateCustomer",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string", "format": "uuid"}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCustomerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Customer updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        }
+      }
+    },
+    "/accounts": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Get accounts",
+        "description": "Retrieve list of bank accounts",
+        "operationId": "getAccounts",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "query",
+            "schema": {"type": "string", "format": "uuid"}
+          },
+          {
+            "name": "accountType",
+            "in": "query",
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Accounts"],
+        "summary": "Create account",
+        "description": "Create new bank account",
+        "operationId": "createAccount",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions",
+        "description": "Retrieve transaction history",
+        "operationId": "getTransactions",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "query",
+            "schema": {"type": "string", "format": "uuid"}
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "schema": {"type": "string", "format": "date"}
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "schema": {"type": "string", "format": "date"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Create transaction",
+        "description": "Process a financial transaction",
+        "operationId": "createTransaction",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Transaction processed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid transaction request"
+          },
+          "402": {
+            "description": "Insufficient funds"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Health check",
+        "description": "Check system health status",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "System is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "System is unhealthy"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@bankplatform.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "example": "SecurePassword123!"
+          },
+          "rememberMe": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "ab1c2d3e4f5g6h7i8j9k0l"
+          },
+          "expiresIn": {
+            "type": "integer",
+            "example": 3600
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          },
+          "requiresMfa": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "MfaVerifyRequest": {
+        "type": "object",
+        "required": ["code", "sessionToken"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$",
+            "example": "123456"
+          },
+          "sessionToken": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": ["SMS", "EMAIL", "TOTP"],
+            "example": "SMS"
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["Teller", "Customer"]
+          }
+        }
+      },
+      "CreateCustomerRequest": {
+        "type": "object",
+        "required": ["firstName", "lastName", "email", "phoneNumber", "dateOfBirth"],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "Doe"
+          },
+          "middleName": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "Michael"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@email.com"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "^\\+233[0-9]{9}$",
+            "example": "+233201234567"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1990-01-15"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["Male", "Female", "Other"],
+            "example": "Male"
+          },
+          "ghanaCardNumber": {
+            "type": "string",
+            "pattern": "^GHA-[0-9]{9}-[0-9]$",
+            "example": "GHA-123456789-1"
+          }
+        }
+      },
+      "CustomerResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerNumber": {
+            "type": "string",
+            "example": "CUST001234567"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "kycStatus": {
+            "type": "string",
+            "enum": ["Pending", "InProgress", "Completed", "Rejected"]
+          },
+          "riskRating": {
+            "type": "string",
+            "enum": ["Low", "Medium", "High", "Critical"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CustomerListResponse": {
+        "type": "object",
+        "properties": {
+          "customers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerResponse"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationInfo"
+          }
+        }
+      },
+      "CreateAccountRequest": {
+        "type": "object",
+        "required": ["customerId", "accountType"],
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "accountType": {
+            "type": "string",
+            "enum": ["Savings", "Current", "FixedDeposit"]
+          },
+          "initialDeposit": {
+            "type": "number",
+            "format": "decimal",
+            "minimum": 50,
+            "example": 100.00
+          },
+          "currency": {
+            "type": "string",
+            "default": "GHS",
+            "example": "GHS"
+          }
+        }
+      },
+      "AccountResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "accountNumber": {
+            "type": "string",
+            "example": "ACC001234567890"
+          },
+          "accountType": {
+            "type": "string",
+            "example": "Savings"
+          },
+          "balance": {
+            "type": "number",
+            "format": "decimal",
+            "example": 1500.00
+          },
+          "availableBalance": {
+            "type": "number",
+            "format": "decimal",
+            "example": 1500.00
+          },
+          "currency": {
+            "type": "string",
+            "example": "GHS"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Active", "Inactive", "Frozen", "Closed"]
+          },
+          "openedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateTransactionRequest": {
+        "type": "object",
+        "required": ["transactionType", "amount", "debitAccountId"],
+        "properties": {
+          "transactionType": {
+            "type": "string",
+            "enum": ["Transfer", "Withdrawal", "Deposit", "Payment"]
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "minimum": 1,
+            "example": 100.00
+          },
+          "debitAccountId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "creditAccountId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "example": "Payment for services"
+          },
+          "narration": {
+            "type": "string",
+            "maxLength": 100,
+            "example": "Monthly subscription"
+          }
+        }
+      },
+      "TransactionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "transactionReference": {
+            "type": "string",
+            "example": "TXN20240115001234"
+          },
+          "transactionType": {
+            "type": "string",
+            "example": "Transfer"
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "example": 100.00
+          },
+          "fee": {
+            "type": "number",
+            "format": "decimal",
+            "example": 2.00
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Pending", "Completed", "Failed", "Cancelled"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["Healthy", "Degraded", "Unhealthy"],
+            "example": "Healthy"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "string",
+            "example": "00:00:00.0123456"
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "database"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "Healthy"
+                },
+                "duration": {
+                  "type": "string",
+                  "example": "00:00:00.0045678"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PaginationInfo": {
+        "type": "object",
+        "properties": {
+          "currentPage": {
+            "type": "integer",
+            "example": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "example": 20
+          },
+          "totalCount": {
+            "type": "integer",
+            "example": 150
+          },
+          "totalPages": {
+            "type": "integer",
+            "example": 8
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Invalid request parameters"
+              },
+              "statusCode": {
+                "type": "integer",
+                "example": 400
+              },
+              "requestId": {
+                "type": "string",
+                "example": "req_123456789"
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+}
